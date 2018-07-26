@@ -42,8 +42,8 @@ pixiMarkersDependency = function() {
         "MarkerContainer.js",
         "bezier-easing.js",
         "tools.min.js",
-        "pixi-markers.js",
-        "L.PixiOverlay.js"
+        "L.PixiOverlay.js",
+        "pixi-markers.js"
       )
     )
   )

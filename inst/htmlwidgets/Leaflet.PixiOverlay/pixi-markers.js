@@ -6,13 +6,13 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 	var loader = new PIXI.loaders.Loader();
 	loader.add('marker', 'img/marker-icon.png');
 
-	document.addEventListener("DOMContentLoaded", function() {
+	window.addEventListener("DOMContentLoaded", function() {
 		loader.load(function(loader, resources) {
 			var texture = resources.marker.texture;
 			var pixiLayer = (function() {
 				var zoomChangeTs = null;
 				var pixiContainer = new PIXI.Container();
-				var innerContainer = new PIXI.particles.ParticleContainer(markersLength, {vertices: true});
+				var innerContainer = new PIXI.particles.ParticleContainer(224, {vertices: true});
 				// add properties for our patched particleRenderer:
 				innerContainer.texture = texture;
 				innerContainer.baseTexture = texture.baseTexture;
@@ -36,9 +36,9 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 						innerContainer.y = origin.y;
 						initialScale = invScale / 8;
 						innerContainer.localScale = initialScale	;
-						for (var i = 0; i < group.length; i++) {
+						for (var i = 0; i < 224; i++) {
 							//var coords = project([getRandom(-60, 60), getRandom(-180, 180)]);
-							var coords = project(group[i]);
+							var coords = project(layer[i]);
 							// our patched particleContainer accepts simple {x: ..., y: ...} objects as children:
 							innerContainer.addChild({
 								x: coords.x - origin.x,
