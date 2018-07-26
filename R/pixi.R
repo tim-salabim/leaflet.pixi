@@ -1,5 +1,32 @@
 #' add Markers to a leaflet map using Pixi
 #'
+#' @examples
+#' dontrun{
+#' library(mapview)
+#' library(leaflet)
+#' library(leaflet.pixi)
+#' library(sf)
+#'
+#' n = 5e6
+#'
+#' df = data.frame(x = runif(n, -10, 20),
+#'                 y = runif(n, 40, 60))
+#'
+#' pts = st_as_sf(df, coords = c("x", "y"), crs = 4326)
+#'
+#' options(viewer = NULL)
+#'
+#' system.time({
+#'   m = leaflet() %>%
+#'     addPixiMarkers(pts) %>%
+#'     addProviderTiles(provider = providers$CartoDB.Positron) %>%
+#'     addMouseCoordinates() %>%
+#'     setView(lng = 8, lat = 50, zoom = 5)
+#' })
+#'
+#' m
+#' }
+#'
 #' @export
 #'
 addPixiMarkers = function(map, data, group = "layer") {

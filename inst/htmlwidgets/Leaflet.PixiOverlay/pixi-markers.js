@@ -4,7 +4,9 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
   var map = this;
 
 	var loader = new PIXI.loaders.Loader();
-	loader.add('marker', 'img/marker-icon.png');
+	loader.add('marker', 'lib/pixiMarkers-0.0.1/img/marker-icon.png');
+
+  //var widget = document.getElementsByClassName("leaflet-container")[0];
 
 	window.addEventListener("DOMContentLoaded", function() {
 		loader.load(function(loader, resources) {
@@ -12,7 +14,7 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 			var pixiLayer = (function() {
 				var zoomChangeTs = null;
 				var pixiContainer = new PIXI.Container();
-				var innerContainer = new PIXI.particles.ParticleContainer(224, {vertices: true});
+				var innerContainer = new PIXI.particles.ParticleContainer(layer.length, {vertices: true});
 				// add properties for our patched particleRenderer:
 				innerContainer.texture = texture;
 				innerContainer.baseTexture = texture.baseTexture;
@@ -27,7 +29,13 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 					var renderer = utils.getRenderer();
 					var project = utils.latLngToLayerPoint;
 					var getScale = utils.getScale;
-					var invScale = 1 / getScale();
+					var invScale = 1;
+					if (zoom >= 8) {
+					  var invScale = 1 / getScale();
+					}
+					if (zoom < 8) {
+					  var invscale = getScale();
+					}
 
 					if (event.type === 'add') {
 						//var origin = project([(48.7 + 49) / 2, (2.2 + 2.8) / 2]);
@@ -36,7 +44,7 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 						innerContainer.y = origin.y;
 						initialScale = invScale / 8;
 						innerContainer.localScale = initialScale	;
-						for (var i = 0; i < 224; i++) {
+						for (var i = 0; i < layer.length; i++) {
 							//var coords = project([getRandom(-60, 60), getRandom(-180, 180)]);
 							var coords = project(layer[i]);
 							// our patched particleContainer accepts simple {x: ..., y: ...} objects as children:
@@ -49,7 +57,7 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 
 					if (event.type === 'zoomanim') {
 						var targetZoom = event.zoom;
-						if (targetZoom >= 8 || zoom >= 8) {
+						if (targetZoom >= 0 || zoom >= 0) {
 							zoomChangeTs = 0;
 							//var targetScale = targetZoom >= 2 ? initialScale / getScale(event.zoom) : initialScale;
 							var targetScale = initialScale / getScale(event.zoom);
