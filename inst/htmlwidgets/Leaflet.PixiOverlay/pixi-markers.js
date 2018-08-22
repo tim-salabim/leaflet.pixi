@@ -9,7 +9,8 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
   }
 
   var graphics = new PIXI.Graphics();
-  graphics.beginFill(0xA5DB36);
+  graphics.beginFill(string2hex("#ffffff"));
+  graphics.tint = 0x0000FF;
   graphics.drawCircle(5, 5, 5);
   var rt = PIXI.RenderTexture.create(graphics.width, graphics.height);
 
@@ -20,15 +21,13 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 
 	window.addEventListener("DOMContentLoaded", function() {
 		loader.load(function(loader, resources) {
-			//var texture = resources.marker.texture;
-			var texture = rt;
 			var pixiLayer = (function() {
 				var zoomChangeTs = null;
 				var pixiContainer = new PIXI.Container();
-				var innerContainer = new PIXI.particles.ParticleContainer(layer.length, {vertices: true});
+				var innerContainer = new PIXI.particles.ParticleContainer(layer.length, {vertices: true, tint: true});
 				// add properties for our patched particleRenderer:
-				innerContainer.texture = texture;
-				innerContainer.baseTexture = texture.baseTexture;
+				innerContainer.texture = rt;
+				innerContainer.baseTexture = rt.baseTexture;
 				innerContainer.anchor = {x: 0, y: 0};
 
 				pixiContainer.addChild(innerContainer);
@@ -60,12 +59,12 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 						for (var i = 0; i < layer.length; i++) {
 							//var coords = project([getRandom(-60, 60), getRandom(-180, 180)]);
 							var coords = project(layer[i]);
-							var clr = string2hex("#ffff00"); //string2hex(colors[i]);
+							//var clr = string2hex("#ffff00"); //string2hex(colors[i]);
 							// our patched particleContainer accepts simple {x: ..., y: ...} objects as children:
 							innerContainer.addChild({
 								x: coords.x - origin.x,
 								y: coords.y - origin.y,
-								tint: clr
+								tint: 0xFF00FF
 							});
 						}
 					}
