@@ -1,13 +1,13 @@
 #' add Markers to a leaflet map using Pixi
 #'
 #' @examples
-#' dontrun{
+#' \dontrun{
 #' library(mapview)
 #' library(leaflet)
 #' library(leaflet.pixi)
 #' library(sf)
 #'
-#' n = 5e6
+#' n = 1e6
 #'
 #' df = data.frame(x = runif(n, -10, 20),
 #'                 y = runif(n, 40, 60))

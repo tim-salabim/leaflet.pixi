@@ -3,6 +3,16 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 
   var map = this;
 
+  function string2hex(string) {
+        var res = string.replace("#", "0x");
+        return(res);
+  }
+
+  var graphics = new PIXI.Graphics();
+  graphics.beginFill(0xA5DB36);
+  graphics.drawCircle(5, 5, 5);
+  var rt = PIXI.RenderTexture.create(graphics.width, graphics.height);
+
 	var loader = new PIXI.loaders.Loader();
 	loader.add('marker', 'lib/pixiMarkers-0.0.1/img/marker-icon.png');
 
@@ -10,7 +20,8 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 
 	window.addEventListener("DOMContentLoaded", function() {
 		loader.load(function(loader, resources) {
-			var texture = resources.marker.texture;
+			//var texture = resources.marker.texture;
+			var texture = rt;
 			var pixiLayer = (function() {
 				var zoomChangeTs = null;
 				var pixiContainer = new PIXI.Container();
@@ -18,7 +29,7 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 				// add properties for our patched particleRenderer:
 				innerContainer.texture = texture;
 				innerContainer.baseTexture = texture.baseTexture;
-				innerContainer.anchor = {x: 0.5, y: 1};
+				innerContainer.anchor = {x: 0, y: 0};
 
 				pixiContainer.addChild(innerContainer);
 				var doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -29,7 +40,9 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 					var renderer = utils.getRenderer();
 					var project = utils.latLngToLayerPoint;
 					var getScale = utils.getScale;
-					var invScale = 1;
+					var invScale = 1 / getScale();
+					renderer.render(graphics, rt);
+
 					if (zoom >= 8) {
 					  var invScale = 1 / getScale();
 					}
@@ -47,20 +60,21 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 						for (var i = 0; i < layer.length; i++) {
 							//var coords = project([getRandom(-60, 60), getRandom(-180, 180)]);
 							var coords = project(layer[i]);
+							var clr = string2hex("#ffff00"); //string2hex(colors[i]);
 							// our patched particleContainer accepts simple {x: ..., y: ...} objects as children:
 							innerContainer.addChild({
 								x: coords.x - origin.x,
-								y: coords.y - origin.y
+								y: coords.y - origin.y,
+								tint: clr
 							});
 						}
 					}
 
 					if (event.type === 'zoomanim') {
 						var targetZoom = event.zoom;
-						if (targetZoom >= 0 || zoom >= 0) {
+						if (targetZoom >= 8 || zoom >= 8) {
 							zoomChangeTs = 0;
-							//var targetScale = targetZoom >= 2 ? initialScale / getScale(event.zoom) : initialScale;
-							var targetScale = initialScale / getScale(event.zoom);
+							var targetScale = targetZoom >= 8 ? 1 / getScale(event.zoom) : initialScale;
 							innerContainer.currentScale = innerContainer.localScale;
 							innerContainer.targetScale = targetScale;
 						}
