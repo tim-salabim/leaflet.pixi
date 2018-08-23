@@ -8,6 +8,13 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
         return(res);
   }
 
+  var tints = [0xff00ff, 0x00ff00, 0x00ffff, 0xffff00, 0x0000ff];
+
+  function randomTint() {
+    ix = Math.floor(Math.random() * 5);
+    return tints[ix];
+  }
+
   var graphics = new PIXI.Graphics();
   graphics.beginFill(string2hex("#ffffff"));
   graphics.tint = 0x0000FF;
@@ -27,6 +34,7 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 				var innerContainer = new PIXI.particles.ParticleContainer(layer.length, {vertices: true, tint: true});
 				// add properties for our patched particleRenderer:
 				innerContainer.texture = rt;
+				innerContainer.texture.tint = 0x0000FF;
 				innerContainer.baseTexture = rt.baseTexture;
 				innerContainer.anchor = {x: 0, y: 0};
 
@@ -44,10 +52,12 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 
 					if (zoom >= 8) {
 					  var invScale = 1 / getScale();
+					  console.log(invScale);
 					}
-					if (zoom < 8) {
-					  var invscale = getScale();
-					}
+					/*if (zoom < 8) {
+					  var invScale = 1 / zoom * 100;
+					  console.log(invScale);
+					}*/
 
 					if (event.type === 'add') {
 						//var origin = project([(48.7 + 49) / 2, (2.2 + 2.8) / 2]);
@@ -64,18 +74,19 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 							innerContainer.addChild({
 								x: coords.x - origin.x,
 								y: coords.y - origin.y,
-								tint: 0xFF00FF
+								tint: randomTint()
 							});
 						}
 					}
 
 					if (event.type === 'zoomanim') {
 						var targetZoom = event.zoom;
-						if (targetZoom >= 8 || zoom >= 8) {
+						if (targetZoom >= 1 || zoom >= 1) {
 							zoomChangeTs = 0;
 							var targetScale = targetZoom >= 8 ? 1 / getScale(event.zoom) : initialScale;
 							innerContainer.currentScale = innerContainer.localScale;
 							innerContainer.targetScale = targetScale;
+							console.log(targetScale)
 						}
 						return;
 					}
