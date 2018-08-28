@@ -4,7 +4,8 @@
 \alias{addPixiMarkers}
 \title{add Markers to a leaflet map using Pixi}
 \usage{
-addPixiMarkers(map, data, group = "layer")
+addPixiMarkers(map, data, color = "#0000ff", size = 4,
+  group = "layer")
 }
 \description{
 add Markers to a leaflet map using Pixi

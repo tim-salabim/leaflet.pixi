@@ -29,7 +29,11 @@
 #'
 #' @export
 #'
-addPixiMarkers = function(map, data, group = "layer") {
+addPixiMarkers = function(map,
+                          data,
+                          color = "#0000ff",
+                          size = 4,
+                          group = "layer") {
 
   if (!inherits(sf::st_geometry(data), c("sfc_POINT", "sfc_MULTIPOINT"))) {
     stop("PixiMarkers can only be shown for points")
@@ -52,7 +56,8 @@ addPixiMarkers = function(map, data, group = "layer") {
   icon = system.file("htmlwidgets/Leaflet.PixiOverlay/img/marker-icon.png",
                      package = "leaflet.pixi")
 
-  leaflet::invokeMethod(map, leaflet::getMapData(map), 'addPixiMarkers', group, icon)
+  leaflet::invokeMethod(map, leaflet::getMapData(map), 'addPixiMarkers',
+                        color, size, group, icon)
 
 }
 

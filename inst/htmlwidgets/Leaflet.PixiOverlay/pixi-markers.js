@@ -1,7 +1,8 @@
-LeafletWidget.methods.addPixiMarkers = function (group) {
+LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
   var easing = BezierEasing(0, 0, 0.25, 1);
 
   var map = this;
+  var layer = eval(group);
 
   function string2hex(string) {
         var res = string.replace("#", "0x");
@@ -17,8 +18,8 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 
   var graphics = new PIXI.Graphics();
   graphics.beginFill(string2hex("#ffffff"));
-  graphics.tint = 0x0000FF;
-  graphics.drawCircle(5, 5, 5);
+  graphics.tint = string2hex(color);
+  graphics.drawCircle(size, size, size);
   var rt = PIXI.RenderTexture.create(graphics.width, graphics.height);
 
 	var loader = new PIXI.loaders.Loader();
@@ -34,7 +35,7 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 				var innerContainer = new PIXI.particles.ParticleContainer(layer.length, {vertices: true, tint: true});
 				// add properties for our patched particleRenderer:
 				innerContainer.texture = rt;
-				innerContainer.texture.tint = 0x0000FF;
+				//innerContainer.texture.tint = string2hex(color);
 				innerContainer.baseTexture = rt.baseTexture;
 				innerContainer.anchor = {x: 0, y: 0};
 
@@ -73,8 +74,7 @@ LeafletWidget.methods.addPixiMarkers = function (group) {
 							// our patched particleContainer accepts simple {x: ..., y: ...} objects as children:
 							innerContainer.addChild({
 								x: coords.x - origin.x,
-								y: coords.y - origin.y,
-								tint: randomTint()
+								y: coords.y - origin.y
 							});
 						}
 					}
