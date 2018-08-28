@@ -18,7 +18,7 @@ LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
 
   var graphics = new PIXI.Graphics();
   graphics.beginFill(string2hex("#ffffff"));
-  graphics.tint = string2hex(color);
+  graphics.tint = randomTint(); //string2hex(color);
   graphics.drawCircle(size, size, size);
   var rt = PIXI.RenderTexture.create(graphics.width, graphics.height);
 
@@ -51,7 +51,7 @@ LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
 					var invScale = 1 / getScale();
 					renderer.render(graphics, rt);
 
-					if (zoom >= 8) {
+					if (zoom >= 9) {
 					  var invScale = 1 / getScale();
 					  console.log(invScale);
 					}
@@ -65,7 +65,7 @@ LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
 						var origin = project([0, 0]);
 						innerContainer.x = origin.x;
 						innerContainer.y = origin.y;
-						initialScale = invScale / 8;
+						initialScale = invScale / 9;
 						innerContainer.localScale = initialScale	;
 						for (var i = 0; i < layer.length; i++) {
 							//var coords = project([getRandom(-60, 60), getRandom(-180, 180)]);
@@ -74,16 +74,18 @@ LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
 							// our patched particleContainer accepts simple {x: ..., y: ...} objects as children:
 							innerContainer.addChild({
 								x: coords.x - origin.x,
-								y: coords.y - origin.y
+								y: coords.y - origin.y,
+								tint: randomTint()
 							});
 						}
+
 					}
 
 					if (event.type === 'zoomanim') {
 						var targetZoom = event.zoom;
 						if (targetZoom >= 1 || zoom >= 1) {
 							zoomChangeTs = 0;
-							var targetScale = targetZoom >= 8 ? 1 / getScale(event.zoom) : initialScale;
+							var targetScale = targetZoom >= 9 ? 1 / getScale(event.zoom) : initialScale;
 							innerContainer.currentScale = innerContainer.localScale;
 							innerContainer.targetScale = targetScale;
 							console.log(targetScale)
