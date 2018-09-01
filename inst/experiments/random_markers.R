@@ -13,7 +13,7 @@ options(viewer = NULL)
 
 system.time({
   m = leaflet() %>%
-    addPixiMarkers(pts1, size = 2, group = "g1") %>%
+    addPixiMarkers(pts1, size = 3) %>%
     addProviderTiles(provider = providers$CartoDB.Positron) %>%
     addMouseCoordinates() %>%
     setView(lng = 0, lat = 0, zoom = 3)

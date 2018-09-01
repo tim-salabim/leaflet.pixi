@@ -2,7 +2,7 @@ LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
   var easing = BezierEasing(0, 0, 0.25, 1);
 
   var map = this;
-  var layer = eval(group);
+  var lyr = eval(group);
 
   function string2hex(string) {
         var res = string.replace("#", "0x");
@@ -32,7 +32,7 @@ LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
 			var pixiLayer = (function() {
 				var zoomChangeTs = null;
 				var pixiContainer = new PIXI.Container();
-				var innerContainer = new PIXI.particles.ParticleContainer(layer.length, {vertices: true, tint: true});
+				var innerContainer = new PIXI.particles.ParticleContainer(lyr.length, {vertices: true, tint: true});
 				// add properties for our patched particleRenderer:
 				innerContainer.texture = rt;
 				//innerContainer.texture.tint = string2hex(color);
@@ -51,7 +51,7 @@ LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
 					var invScale = 1 / getScale();
 					renderer.render(graphics, rt);
 
-					if (zoom >= 9) {
+					if (zoom >= 7) {
 					  var invScale = 1 / getScale();
 					  console.log(invScale);
 					}
@@ -65,11 +65,11 @@ LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
 						var origin = project([0, 0]);
 						innerContainer.x = origin.x;
 						innerContainer.y = origin.y;
-						initialScale = invScale / 9;
+						initialScale = 6; //invScale / 7;
 						innerContainer.localScale = initialScale	;
-						for (var i = 0; i < layer.length; i++) {
+						for (var i = 0; i < lyr.length; i++) {
 							//var coords = project([getRandom(-60, 60), getRandom(-180, 180)]);
-							var coords = project(layer[i]);
+							var coords = project(lyr[i]);
 							//var clr = string2hex("#ffff00"); //string2hex(colors[i]);
 							// our patched particleContainer accepts simple {x: ..., y: ...} objects as children:
 							innerContainer.addChild({
@@ -85,7 +85,7 @@ LeafletWidget.methods.addPixiMarkers = function (color, size, group) {
 						var targetZoom = event.zoom;
 						if (targetZoom >= 1 || zoom >= 1) {
 							zoomChangeTs = 0;
-							var targetScale = targetZoom >= 9 ? 1 / getScale(event.zoom) : initialScale;
+							var targetScale = targetZoom >= 7 ? 1 / getScale(event.zoom) : initialScale;
 							innerContainer.currentScale = innerContainer.localScale;
 							innerContainer.targetScale = targetScale;
 							console.log(targetScale)
